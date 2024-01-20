@@ -27,10 +27,18 @@ const PersonalDetail = () => {
       .required('Age is Required'),
     sex: yup.string().required('Please Select Sex'),
     phone: yup
-      .string()
-      .matches(validateMobile, 'Please enter a valid mobile number'),
-    govtIDNum: yup.string().matches(govtIDType === "Aadhar" ? validateAadhar : validatePan, 'Please enter valid Govt ID Number'),
-  });
+      .string().nullable()
+      .notRequired().when('phone', {
+        is: (value) => value?.length,
+        then: (rule) => rule.matches(validateMobile, 'Please enter a valid mobile number'),
+      })
+    ,
+    govtIDNum: yup.string().nullable()
+      .notRequired().matches(govtIDType === "Aadhar" ? validateAadhar : validatePan, 'Please enter valid Govt ID Number'),
+  },
+    [
+      ['phone', 'phone'],
+    ]);
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),

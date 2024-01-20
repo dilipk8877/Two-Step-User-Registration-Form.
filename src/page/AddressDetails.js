@@ -13,10 +13,19 @@ const AddressDetails = () => {
     const dispatch = useDispatch()
     const schema = yup.object().shape({
         pincode: yup
-            .string().matches(/^\d+$/, "Please enter 6 digit pincode")
-            .min(6, "Please enter 6 digit pincode")
-            .max(6, "Please enter 6 digit pincode")
-    })
+            .string().nullable()
+            .notRequired().when('pincode', {
+              is: (value) => value?.length,
+              then: (rule) => rule.matches(/^\d+$/, "Please enter 6 digit pincode")
+              .min(6, "Please enter 6 digit pincode")
+              .max(6, "Please enter 6 digit pincode"),
+            })
+          ,
+           
+    },
+    [
+        ['pincode', 'pincode'],
+      ])
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
