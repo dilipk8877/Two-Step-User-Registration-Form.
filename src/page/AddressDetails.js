@@ -7,13 +7,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCountry } from '../feature/GetCountryList';
 import { setSaveAddressDetails } from '../feature/FormRegisterSlice';
 import { useNavigate } from 'react-router-dom';
+import { cityList, stateList } from '../utils';
 
 
 const AddressDetails = () => {
     const { getCountryList } = useSelector((state) => state.country)
+    const { savePersonalDetails } = useSelector((state) => state.address);
     const [searchCountry, setSearchCountry] = useState('');
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (Object.keys(savePersonalDetails).length === 0) {
+          navigate("/");
+        }
+      }, [savePersonalDetails, navigate]);
     const schema = yup.object().shape({
         pincode: yup
             .string().nullable()
@@ -44,19 +52,7 @@ const AddressDetails = () => {
     }, [])
 
  
-    const stateList = [
-        'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa',
-        'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
-        'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
-        'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-        'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
-    ];
-
-    const cityList = [
-        'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai', 'Kolkata',
-        'Ahmedabad', 'Pune', 'Jaipur', 'Lucknow', 'Kanpur', 'Nagpur',
-        'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Patna', 'Vadodara',
-    ];
+  
 
     return (
         <Container maxWidth="md" style={{ marginTop: '20px' }}>

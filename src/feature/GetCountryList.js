@@ -5,9 +5,11 @@ const initialState = {
     isLoading:false,
     error:""
 }
+const apiKey = process.env.REACT_APP_COUNTRY_API_KEY;
+
 export const getCountry = createAsyncThunk("country/getCountry", async (_, thunkAPI) => {
     try {
-        const res = await fetch(`https://restcountries.com/v3.1/all`);
+        const res = await fetch(apiKey);
         const data = await res.json();
         return data;
     } catch (error) {
