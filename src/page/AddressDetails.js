@@ -5,11 +5,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCountry } from '../feature/GetCountryList';
+import { setSaveAddressDetails } from '../feature/FormRegisterSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const AddressDetails = () => {
     const { getCountryList } = useSelector((state) => state.country)
     const [searchCountry, setSearchCountry] = useState('');
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const schema = yup.object().shape({
         pincode: yup
@@ -31,7 +34,11 @@ const AddressDetails = () => {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data) => console.log(data);
+    const onSubmit = (data) => {
+        dispatch(setSaveAddressDetails(data))
+        navigate("/data-table")
+    };
+
     useEffect(() => {
         dispatch(getCountry())
     }, [])
